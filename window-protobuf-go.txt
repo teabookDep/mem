@@ -1,0 +1,40 @@
+1、获取 Protobuf 编译器 protoc，跟C++通用的；可以在git下载到二进制文件
+https://github.com/protocolbuffers/protobuf/releases
+
+2、获取 goprotobuf 提供的 Protobuf 
+编译器插件 protoc-gen-go
+go get github.com/golang/protobuf/protoc-gen-go
+将protoc-gen-go二进制执行程序所在的目录加入到环境变量，或者直接将二进制文件拷贝到 protoc 所在的目录
+
+3.获取 goprotobuf 提供的支持库，包含诸如编码（marshaling）、解码（unmarshaling）等功能
+go get github.com/golang/protobuf/proto
+
+
+4.获取 grpc 
+go get -u github.com/grpc/grpc-go
+
+服务定义文件ProductService.poto在工程中的路径为：src/grpc/servicedef/product/ProductService.poto，进入servicedef目录，执行以下命令生成Go版本的客户端和服务端代码
+protoc -I product/ ProductService.proto --go_out=plugins=grpc:product
+
+5.获取 text/sys/net pakage
+
+go get -u github.com/golang/text
+go get -u github.com/golang/sys
+go get -u github.com/golang/net
+
+
+(undefined: proto.ProtoPackageIsVersion3)が発生するとき
+ $ git clone https://github.com/golang/protobuf
+ $ cd ~/protobuf/protoc-gen-go
+ $ git checkout tags/v1.2.0 -b v1.2.0
+ $ go install   ->(~/go/bin/protoc-gen-go.exe が作成される)
+（4.を再実行）
+ 
+
+包管理
+cd && mkdir helloworld && cd helloworld
+然后创建文件main.go
+go mod init helloworld
+go build
+
+

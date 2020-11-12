@@ -1,0 +1,29 @@
+ou@bigd:~$ history
+> sudo passwd
+> sudo apt update
+> sudo apt install python3-pip
+> pip3 install awscli
+> aws --version
+> sudo apt install awscli
+> aws --version
+> aws configure
+> aws s3 ls
+> aws dynamodb list-tables
+> pip3 install awsebcli --upgrade --user
+> sudo apt install docker.io
+> docker
+> eb --version
+
+
+-------------------------------------------------
+Ubuntuのバージョンを確認
+cat /etc/lsb-release
+uname -a
+アーキテクチャを確認
+arch
+-------------------------------------------------
+
+tree -L 2 -I node_modules --dirsfirst -aF
+
+
+

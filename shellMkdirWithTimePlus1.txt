@@ -1,0 +1,41 @@
+#!/bin/bash
+#以小时循环
+#sh x.sh '20150416 12:20' '20150416 12:25'
+
+stime=$1
+etime=$(date -d "$2"  +%Y%m%d%H%M)
+while :
+do
+    echo $stime  $etime
+    stime=$(date -d "${stime} 1minute"  +%Y%m%d%H%M)
+    if [[ $stime -gt $etime ]]
+    then
+        break   
+    fi  
+done
+
+
+#!/bin/bash
+#sh x.sh '201504161220' '201504161225'
+
+stime=$1
+etime=$2
+while :
+do
+    #echo $stime  $etime
+    stime=$(date -d "${stime:0:8} ${stime:8:4} 1minute"  +%Y%m%d%H%M)
+    fdirs=r$(date -d "${stime:0:8} ${stime:8:4}"  +%Y-%-m-%d-%H%M)/year=2019/key=vin
+    mkdir -p ${fdirs}
+    echo "file1" >${fdirs}/file1.txt
+    echo "file1" >${fdirs}/file2.txt
+    echo "file1" >${fdirs}/file3.txt
+    if [[ $stime -gt $etime ]]
+    then
+        break
+    fi
+done
+
+
+for i in `seq 0 95` ;do mkdir k${i};done
+
+

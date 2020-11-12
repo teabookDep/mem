@@ -1,0 +1,160 @@
+
+#■Docker_Spark-Yarn-Hadoop-master
+* hadoop All Applications URL: http://localhost:8088/cluster
+
+* Namenode: http://localhost:50070
+* Datanode: http://localhost:50075
+* Spark-master: http://localhost:4040
+* Spark-history: http://localhost:18080/
+------------------------------------------------
+* spark job history URL: 
+http://localhost:18080/history/application_1537091197755_0001/jobs/
+http://localhost:8088/proxy/application_1537091197755_0007/
+
+-------------------------------------------------------------------------------------
+■spark sample 
+#ok
+$SPARK_HOME/bin/run-example SparkPi 100
+
+#ok
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+#ok
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn --deploy-mode client --driver-memory 1g --num-executors 2 --executor-memory 1g --executor-cores 2 $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+#ok
+$SPARK_HOME/bin/spark-submit --master yarn --deploy-mode client --driver-memory 1g --num-executors 2 --executor-memory 1g --executor-cores 2 $SPARK_HOME/examples/src/main/python/wordcount.py /user/input/ipt.txt
+
+
+$SPARK_HOME/bin/run-example JavaWordCount /user/input
+
+
+
+
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://spark-master:7077 $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+$SPARK_HOME/bin/spark-submit $SPARK_HOME/examples/src/main/python/pi.py 10
+$SPARK_HOME/bin/spark-submit run-example --master spark://spark-master:7077 sql.SparkSQLExample
+
+$SPARK_HOME/bin/run-example SparkPi 100
+
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://node-master:8030 $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+
+
+/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://spark-master:7077 /spark/examples/jars/spark-examples*.jar 100
+
+
+$SPARK_HOME/bin/spark-submit $SPARK_HOME/examples/src/main/python/pi.py 10
+$SPARK_HOME/bin/spark-submit run-example --master spark://spark-master:7077 sql.SparkSQLExample
+--
+/opt/spark-2.3.0-bin-hadoop2.7/examples/src/main/java/org/apache/spark/examples#
+$SPARK_HOME/examples/src/main/java/org/apache/spark/examples/
+
+-------------------------------------------------------------------------------------
+
+hdfs dfs -put /data/books/pg1232.txt hdfs://master:9000/mybook.txt
+hadoop fs -ls -R /
+hadoop fs -mkdir -p /user/input
+hadoop fs -mkdir -p /user/output
+hadoop fs -put /hadoop-data/dfs/name/ipt.txt /user/input/
+hadoop fs -rm /user/input/ipt.txt
+
+-------------------------------------------------------------------------------------
+■docker
+#查看动态资源占用情况
+docker stats --all shows a running list of containers.
+#查看对象信息
+docker inspect imageID/containerID
+
+docker exec -it <<Container_ID>> /bin/bash #by Container ID
+docker exec -it c1e8e59afc0d /bin/bash 
+(docker attach 8d98fd43acd4)
+
+#查看对象使用IP
+docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' containerID
+#查看对象在宿主机上的位置
+docker inspect containerID
+
+
+-------------------------------------------------------------------------------------
+#stop all containers
+docker stop $(docker ps -aq)
+delete all containers
+#docker rm $(docker ps -aq)
+#stop and delete all containers
+#docker stop $(docker ps -q) & docker rm $(docker ps -aq)
+
+#delete all images
+docker rmi $(docker images -q)
+#delete all images force
+docker rmi -f $(docker images -q)
+#delete all images id is none
+docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+
+#To clear containers: 
+docker rm -f $(docker ps -a -q)
+#To clear images: 
+docker rmi -f $(docker images -a -q)
+#To clear volumes: 
+docker volume rm $(docker volume ls -q)
+#To clear networks: 
+docker network rm $(docker network ls | tail -n+2 | awk '{if($2 !~ /bridge|none|host/){ print $1 }}')
+
+-------------------------------------------------------------------------------------
+uname -a
+
+#backup image:
+docker save -o img.base.save 749452e7df67
+docker save -o img.node-master.save 1a36bf676deb
+docker save -o img.node-one.save a5b642c6b0af
+docker save -o img.node-two.save 22b2c6d9f9c3
+docker save -o img.debian.save 7f228954ce78
+docker save -o img.docker4w_nsenter-dockerd.save cae870735e91
+
+#load image from saved image
+docker load -i img.base.save
+docker load -i img.node-master.save
+docker load -i img.node-one.save
+docker load -i img.node-two.save 
+docker load -i img.debian.save
+docker load -i img.docker4w_nsenter-dockerd.save
+
+根据一个镜像可以启动多个容器，启动容器的命令是docker run
+sudo docker run -t -i ubuntu:12.04  /bin/bash
+或者
+sudo docker run -t -i  镜像id
+
+#commit container to image
+docker commit -m 'install git mvn' 40112ba82754
+
+#docker tag : 标记本地镜像，将其归入某一仓库。
+docker tag [OPTIONS] IMAGE[:TAG] [REGISTRYHOST/][USERNAME/]NAME[:TAG]
+docker tag 68100b162864 node-mst:v1
+>REPOSITORY                 TAG                 IMAGE ID            CREATED             SIZE
+>node-mst                   v1                  68100b162864        12 minutes ago      1.66GB
+
+-------------------------------------------------------------------------------------
+apt-get install git
+git clone https://github.com/apache/spark.git
+
+apt-cache search maven
+ls -l /etc/maven
+
+apt-get clean
+apt-get autoclean
+apt-get autoremove
+
+docker 注入最后动作
+# 打扫卫生
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+    
+
+-------------------------------------------------------------------------------------
+ curl -fSL http://mirror.yannic-bonenberger.com/apache/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -o /tmp/spark.tar.tgz
+↓
+ https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+
+-------------------------------------------------------------------------------------
