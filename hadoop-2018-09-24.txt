@@ -1,0 +1,24 @@
+-------------------------------------------------------------------------------------
+
+hdfs dfs -put /data/books/pg1232.txt hdfs://master:9000/mybook.txt
+hadoop fs -ls -R /
+hadoop fs -du -s -h /user/input/canavro/
+hadoop fs -mkdir -p /user/input/canavro
+hadoop fs -mkdir -p /user/output
+hadoop fs -mkdir -p /user/lib
+hadoop fs -put /hadoop-data/share/input.txt /user/input/
+hadoop fs -put /hadoop-data/share/iptfile02.txt /user/input/
+hadoop fs -rm /user/input/canavro/*
+hadoop fs -mv /user/input/student.avsc /user/schema/.
+hadoop fs -put -f /share/input/avrohive/caninfodata.avro /user/input/canavro/
+hadoop fs -cat /user/input/canavro/part-r-00000.avro
+
+hadoop fs -rm /user/schema/caninfoschema.avsc
+hadoop fs -put /share/input/avrohive/caninfoschema2.avsc /user/schema/
+hadoop fs -put /share/lib/Hive-hook-example-1.0.jar /user/lib/
+
+/share/lib/Hive-hook-example-1.0.jar
+add jar hdfs:///user/lib/Hive-hook-example-1.0.jar;
+set hive.exec.pre.hooks=HiveExampleHook;
+hive  --service hiveserver2 restart
+

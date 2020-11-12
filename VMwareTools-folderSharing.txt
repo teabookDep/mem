@@ -1,0 +1,10 @@
+# cp /run/media/sora/VMware\ Tools/VMwareTools-10.2.0-7259539.tar.gz /tmp
+# cd tmp
+# tar zxvpf VMwareTools-10.2.5-8068393.tar.gz
+# cd vmware-tools-distrib
+# ./vmware-install.pl -d 
+
+cp /run/media/admin/VMware\ Tools/VMwareTools-10.2.0-7259539.tar.gz /tmp
+cd /tmp
+tar zxvpf VMwareTools-10.2.0-7259539.tar.gz
+

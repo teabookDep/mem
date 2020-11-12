@@ -1,0 +1,116 @@
+#■Docker_Spark-Yarn-Hadoop-master
+* hadoop All Applications URL: http://localhost:8088/cluster
+
+* Namenode: http://localhost:50070
+* Datanode: http://localhost:50075
+* Spark-master: http://localhost:4040
+* Spark-history: http://localhost:18080/
+------------------------------------------------
+* spark job history URL: 
+http://localhost:18080/history/application_1537367703154_0004/jobs/
+http://localhost:8088/proxy/application_1537091197755_0007/
+application_1537367703154_0004
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+■docker
+docker rename CONTAINER NEW_NAME
+docker tag d583c3ac45fd myname/server:latest
+
+cd D:\docker\spark\Docker_Spark-Yarn-Hadoop-master\imageBak
+docker-compose -f docker-compose_test.yml up
+ docker info
+#查看动态资源占用情况
+docker stats --all shows a running list of containers.
+#查看对象信息
+docker inspect imageID/containerID
+
+docker exec -it <<Container_ID>> /bin/bash #by Container ID
+docker exec -it e88681417cb4 /bin/bash 
+docker exec -it c1e8e59afc0d /bin/bash 
+ 
+(docker attach 8d98fd43acd4)
+
+-------------------------------------------------------------------------------------
+
+#stop all containers
+docker start $(docker ps -aq)
+docker stop $(docker ps -aq)
+#delete all containers
+docker rm $(docker ps -aq)
+#stop and delete all containers
+#docker stop $(docker ps -q) & docker rm $(docker ps -aq)
+
+#delete all images
+docker rmi $(docker images -q)
+#delete all images force
+docker rmi -f $(docker images -q)
+#delete all images id is none
+docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+-------------------------------------------------------------------------------------
+uname -a
+cd D:\docker\spark\Docker_Spark-Yarn-Hadoop-master\imageBak
+#backup image:
+docker save -o img.base.save 749452e7df67
+docker save -o img.node-master.save 1a36bf676deb
+docker save -o img.node-one.save a5b642c6b0af
+docker save -o img.node-two.save 22b2c6d9f9c3
+docker save -o img.debian.save 7f228954ce78
+docker save -o img.docker4w_nsenter-dockerd.save cae870735e91
+
+#load image from saved image
+#docker load -i img.base.save
+#docker tag 749452e7df67 base:advith
+#docker load -i img.debian.save
+#docker tag 7f228954ce78 debian:advith
+#docker load -i img.docker4w_nsenter-dockerd.save
+#docker tag cae870735e91 docker4w/nsenter-dockerd:advith
+-------
+docker load -i img.node-master.save
+docker tag 1a36bf676deb node-master:advith
+docker load -i img.node-one.save
+docker tag a5b642c6b0af node-one:advith
+docker load -i img.node-two.save 
+docker tag 22b2c6d9f9c3 node-two:advith
+docker-compose up
+
+---------
+根据一个镜像可以启动多个容器，启动容器的命令是docker run
+sudo docker run -t -i ubuntu:12.04  /bin/bash
+或者
+sudo docker run -t -i  镜像id
+
+#commit container to image
+docker commit -m 'install git mvn' 40112ba82754
+
+#docker tag : 标记本地镜像，将其归入某一仓库。
+docker tag [OPTIONS] IMAGE[:TAG] [REGISTRYHOST/][USERNAME/]NAME[:TAG]
+docker tag 68100b162864 node-mst:v1
+>REPOSITORY                 TAG                 IMAGE ID            CREATED             SIZE
+>node-mst                   v1                  68100b162864        12 minutes ago      1.66GB
+
+-------------------------------------------------------------------------------------
+apt-get install git
+git clone https://github.com/apache/spark.git
+
+apt-cache search maven
+ls -l /etc/maven
+
+apt-get clean
+apt-get autoclean
+apt-get autoremove
+
+netstat -an
+
+-------------------------------------------------------------------------------------
+查看所有的volume
+docker volume ls
+删除没有被使用的所有volume
+docker volume prune
+
+D:/var/lib/docker/volumes/imagebak_node-one/_data
+docker run -v /d:/var:/hadoop-data/dfs
+
+---------------------------------------------------------------------
+mvn exec:java -Dexec.mainClass=cc.unmi.AvroDataTranser
+
+

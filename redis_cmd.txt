@@ -1,0 +1,10 @@
+C:\opt\redisClusterWindow\6380\redis-cli.exe 
+
+C:\opt\redisClusterWindow\6380\redis-cli -p 6380 
+C:\opt\redisClusterWindow\6380\redis-cli -p 6380 cluster nodes
+C:\opt\redisClusterWindow\6380\redis-cli -p 6380 cluster slots
+
+C:\opt\redisClusterWindow\6380\redis-cli -p 6380 --status
+
+
+

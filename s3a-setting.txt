@@ -1,0 +1,17 @@
+    SparkConf sparkConf = new SparkConf().setAppName("JavaWordCount");
+    JavaSparkContext ctx = new JavaSparkContext(sparkConf);
+
+    ctx.hadoopConfiguration().set("fs.s3a.access.key", "yourAccess");
+    ctx.hadoopConfiguration().set("fs.s3a.secret.key", "yourKey");
+    ctx.hadoopConfiguration().set("fs.s3a.connection.ssl.enabled", "false");
+    ctx.hadoopConfiguration().set("fs.s3a.endpoint", "1.2.3.4:80");
+
+
+spark-submit时，最后填写的参数是s3路径，如: s3a://zzz/
+
+提交到YARN上去：
+./bin/spark-submit --principal ieevee/zelda1@ZELDA.COM --keytab /etc/security/ieevee.zelda1.keytab --driver-java-options '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=13838'  --jars /home/ieevee/hadoop/hadoop-2.7.2/share/hadoop/tools/lib/aws-java-sdk-1.7.4.jar,/home/ieevee/hadoop/hadoop-2.7.2/share/hadoop/tools/lib/hadoop-aws-2.7.2.jar  --class com.ieevee.dthink.ads.zkcfg.HiveJdbcClient --master yarn /home/ieevee/zkcfg-1.0-SNAPSHOT.jar s3a://zzz/
+如上，最后一个参数就是我们要处理的S3 bucket。
+
+https://ox0spy.github.io/post/bigdata/spark-with-s3a/
+

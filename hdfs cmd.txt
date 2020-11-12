@@ -1,0 +1,77 @@
+◆查看文件常用命令
+命令格式 
+1.hdfs dfs -ls path 查看文件列表 
+2.hdfs dfs -lsr path 递归查看文件列表 
+3.hdfs dfs -du path 查看path下的磁盘情况，单位字节
+使用示例 
+1.hdfs dfs -ls / 查看当前目录 
+2.hdfs dfs - lsr / 递归查看当前目录
+◆创建文件夹
+命令格式 
+hdfs dfs -mkdir path
+使用用例 
+hdfs dfs -mkdir /user/iron 
+注：该命令可递归创建文件夹，不可重复创建，在Linux文件系统中不可见
+◆创建文件
+命令格式 
+hdfs dfs -touchz path
+使用用例 
+hdfs dfs -touchz /user/iron/iron.txt 
+注：该命令不可递归创建文件即当该文件的上级目录不存在时无法创建该文件，可重复创建但会覆盖原有的内容
+◆复制文件和目录
+命令格式 
+hdfs dfs -cp 源目录 目标目录
+使用用例 
+hdfs dfs -cp /user/iron /user/iron01 
+注：该命令会将源目录的整个目录结构都复制到目标目录中 
+hdfs dfs -cp /user/iron/* /user/iron01 
+注：该命令只会将源目录中的文件及其文件夹都复制到目标目录中
+◆移动文件和目录
+命令格式 
+hdfs dfs -mv 源目录 目标目录
+使用用例 
+hdfs dfs -mv /user/iron /user/iron01
+◆赋予权限
+命令格式 
+hdfs dfs -chmod [权限参数][拥有者][:[组]] path
+使用用例 
+hdfs dfs -chmod 777 /user/* 
+注：该命令是将user目录下的所用文件及其文件夹（不包含子文件夹中的文件）赋予最高权限：读，写，执行 
+777表示该用户，该用户的同组用户，其他用户都具有最高权限
+◆上传文件
+命令格式 
+hdfs dfs -put 源文件夹 目标文件夹
+使用用例 
+hdfs dfs -put /home/hadoop01/iron /user/iron01 
+注：该命令上传Linux文件系统中iron整个文件夹 
+hdfs dfs -put /home/hadoop01/iron/* /user/iron01 
+注：该命令上传Linux文件系统中iron文件夹中的所有文件（不包括文件夹） 
+类似命令： 
+hdfs dfs -copyFromLocal 源文件夹 目标文件夹 作用同put 
+hdfs dfs -moveFromLocal 源文件夹 目标文件夹 上传后删除本地
+◆下载文件
+命令格式 
+hdfs dfs -get源文件夹 目标文件夹
+使用用例 
+hdfs dfs -get /user/iron01 /home/hadoop01/iron 
+注：该命令下载hdfs文件系统中的iron01整个文件夹到Linux文件系统中 
+hdfs dfs -get /user/iron01/* /home/hadoop01/iron 
+注：该命令下载hdfs文件系统中的iron01整个文件夹到Linux文件系统中（不包含文件夹） 
+类似命令 
+hdfs dfs -copyToLocal 源文件夹 目标文件夹 作用同get 
+hdfs dfs -moveToLocal 源文件夹 目标文件夹 get后删除源文件
+◆查看文件内容
+命令格式 
+hadoop fs -cat path 从头查看这个文件 
+hadoop fs -tail path 从尾部查看最后1K 
+使用用例 
+hadoop fs -cat /userjzl/home/book/1.txt 
+hadoop fs -tail /userjzl/home/book/1.txt
+◆删除文件
+命令格式 
+hdfs dfs -rm 目标文件 
+hdfs dfs -rmr 目标文件 递归删除（慎用）
+使用用例 
+hdfs dfs -rm /user/test.txt 删除test.txt文件 
+hdfs dfs -rmr /user/testdir 递归删除testdir文件夹 
+注：rm不可以删除文件夹

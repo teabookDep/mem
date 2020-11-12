@@ -1,0 +1,56 @@
+﻿------------------------------------------
+https://www.tecmint.com/setup-local-http-yum-repository-on-centos-7/
+https://www.centos.org/forums/viewtopic.php?t=61184
+
+
+mkdir -p /mnt/hgfs/share/osupd/{base,centosplus,extras,updates}
+
+reposync -g -l -d -m --repoid=base --newest-only --download-metadata --download_path=/mnt/hgfs/share/osupd/
+reposync -g -l -d -m --repoid=centosplus --newest-only --download-metadata --download_path=/mnt/hgfs/share/osupd/
+reposync -g -l -d -m --repoid=extras --newest-only --download-metadata --download_path=/mnt/hgfs/share/osupd/
+reposync -g -l -d -m --repoid=updates --newest-only --download-metadata --download_path=/mnt/hgfs/share/osupd/
+
+ls -l /mnt/hgfs/share/osupd/base/
+ls -l /mnt/hgfs/share/osupd/base/Packages/
+ls -l /mnt/hgfs/share/osupd/centosplus/
+ls -l /mnt/hgfs/share/osupd/centosplus/Packages/
+ls -l /mnt/hgfs/share/osupd/extras/
+ls -l /mnt/hgfs/share/osupd/extras/Packages/
+ls -l /mnt/hgfs/share/osupd/updates/
+ls -l /mnt/hgfs/share/osupd/updates/Packages/
+
+createrepo -g comps.xml /mnt/hgfs/share/osupd/base/  
+createrepo /mnt/hgfs/share/osupd/centosplus/
+createrepo /mnt/hgfs/share/osupd/extras/
+createrepo /mnt/hgfs/share/osupd/updates/
+
+------------------------------------------
+local-repos.repo
+
+[local-base]
+name=CentOS Base
+baseurl=http://repos.test.lab/base/
+gpgcheck=0
+enabled=1
+
+[local-centosplus]
+name=CentOS CentOSPlus
+baseurl=http://repos.test.lab/centosplus/
+gpgcheck=0
+enabled=1
+
+[local-extras]
+name=CentOS Extras
+baseurl=http://repos.test.lab/extras/
+gpgcheck=0
+enabled=1
+
+[local-updates]
+name=CentOS Updates
+baseurl=http://repos.test.lab/updates/
+gpgcheck=0
+enabled=1
+
+------------------------------------------
+/mnt/hgfs/share/osupd
+createrepo /mnt/hgfs/share/openstack-pike/

@@ -1,0 +1,47 @@
+
+-------------------------------------------------------------------------------------
+■spark sample 
+#ok
+$SPARK_HOME/bin/run-example SparkPi 100
+
+#ok
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+#ok
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn --deploy-mode client --driver-memory 1g --num-executors 2 --executor-memory 1g --executor-cores 2 $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+#ok
+$SPARK_HOME/bin/spark-submit --master yarn --deploy-mode client --driver-memory 1g --num-executors 2 --executor-memory 1g --executor-cores 2 $SPARK_HOME/examples/src/main/python/wordcount.py /user/input/ipt.txt
+
+#ok
+$SPARK_HOME/bin/spark-submit --class com.packt.sfjd.ch10.SparkWordCount --master yarn --deploy-mode client --driver-memory 1g --num-executors 2 --executor-memory 1g --executor-cores 2 /hadoop-data/share/SparkForJavaDevelopers-0.0.1-SNAPSHOT-jar-with-dependencies.jar /user/input/input.txt
+
+$SPARK_HOME/bin/spark-submit --class com.packt.sfjd.ch5.HdfsExample --master yarn --deploy-mode client --driver-memory 1g --num-executors 2 --executor-memory 1g --executor-cores 2 /hadoop-data/share/SparkForJavaDevelopers-0.0.1-SNAPSHOT-jar-with-dependencies.jar /user/input/iptfile02.txt
+
+Caused by: org.apache.hadoop.ipc.RemoteException(java.io.IOException): Specified block size is less than configured minimum value (dfs.namenode.fs-limits.min-block-size): 2 < 1048576
+
+$SPARK_HOME/bin/run-example JavaWordCount /user/input
+
+
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://spark-master:7077 $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+$SPARK_HOME/bin/spark-submit $SPARK_HOME/examples/src/main/python/pi.py 10
+$SPARK_HOME/bin/spark-submit run-example --master spark://spark-master:7077 sql.SparkSQLExample
+
+$SPARK_HOME/bin/run-example SparkPi 100
+
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://node-master:8030 $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://spark-master:7077 /spark/examples/jars/spark-examples*.jar 100
+
+
+$SPARK_HOME/bin/spark-submit $SPARK_HOME/examples/src/main/python/pi.py 10
+$SPARK_HOME/bin/spark-submit run-example --master spark://spark-master:7077 sql.SparkSQLExample
+--
+/opt/spark-2.3.0-bin-hadoop2.7/examples/src/main/java/org/apache/spark/examples#
+$SPARK_HOME/examples/src/main/java/org/apache/spark/examples/
+
+---------------------------------------------------------------------
+mvn exec:java -Dexec.mainClass=cc.unmi.AvroDataTranser
+
+

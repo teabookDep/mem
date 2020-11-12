@@ -1,0 +1,279 @@
+
+#■Docker_Spark-Yarn-Hadoop-master
+* hadoop All Applications URL: http://localhost:8088/cluster
+
+* Namenode: http://localhost:50070
+* Datanode: http://localhost:50075
+* Spark-master: http://localhost:4040
+* Spark-history: http://localhost:18080/
+------------------------------------------------
+* spark job history URL: 
+http://localhost:18080/history/application_1537367703154_0004/jobs/
+http://localhost:8088/proxy/application_1537091197755_0007/
+application_1537367703154_0004
+-------------------------------------------------------------------------------------
+■spark sample 
+#ok
+$SPARK_HOME/bin/run-example SparkPi 100
+
+#ok
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+#ok
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn --deploy-mode client --driver-memory 1g --num-executors 2 --executor-memory 1g --executor-cores 2 $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+#ok
+$SPARK_HOME/bin/spark-submit --master yarn --deploy-mode client --driver-memory 1g --num-executors 2 --executor-memory 1g --executor-cores 2 $SPARK_HOME/examples/src/main/python/wordcount.py /user/input/ipt.txt
+
+#ok
+$SPARK_HOME/bin/spark-submit --class com.packt.sfjd.ch10.SparkWordCount --master yarn --deploy-mode client --driver-memory 1g --num-executors 2 --executor-memory 1g --executor-cores 2 /hadoop-data/share/SparkForJavaDevelopers-0.0.1-SNAPSHOT-jar-with-dependencies.jar /user/input/input.txt
+
+$SPARK_HOME/bin/spark-submit --class com.packt.sfjd.ch5.HdfsExample --master yarn --deploy-mode client --driver-memory 1g --num-executors 2 --executor-memory 1g --executor-cores 2 /hadoop-data/share/SparkForJavaDevelopers-0.0.1-SNAPSHOT-jar-with-dependencies.jar /user/input/iptfile02.txt
+
+Caused by: org.apache.hadoop.ipc.RemoteException(java.io.IOException): Specified block size is less than configured minimum value (dfs.namenode.fs-limits.min-block-size): 2 < 1048576
+
+$SPARK_HOME/bin/run-example JavaWordCount /user/input
+
+
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://spark-master:7077 $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+$SPARK_HOME/bin/spark-submit $SPARK_HOME/examples/src/main/python/pi.py 10
+$SPARK_HOME/bin/spark-submit run-example --master spark://spark-master:7077 sql.SparkSQLExample
+
+$SPARK_HOME/bin/run-example SparkPi 100
+
+$SPARK_HOME/bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://node-master:8030 $SPARK_HOME/examples/jars/spark-examples*.jar 100
+
+/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master spark://spark-master:7077 /spark/examples/jars/spark-examples*.jar 100
+
+
+$SPARK_HOME/bin/spark-submit $SPARK_HOME/examples/src/main/python/pi.py 10
+$SPARK_HOME/bin/spark-submit run-example --master spark://spark-master:7077 sql.SparkSQLExample
+--
+/opt/spark-2.3.0-bin-hadoop2.7/examples/src/main/java/org/apache/spark/examples#
+$SPARK_HOME/examples/src/main/java/org/apache/spark/examples/
+
+-------------------------------------------------------------------------------------
+
+hdfs dfs -put /data/books/pg1232.txt hdfs://master:9000/mybook.txt
+hadoop fs -ls -R /
+hadoop fs -du -s -h /user/input/canavro/
+hadoop fs -mkdir -p /user/input/canavro
+hadoop fs -mkdir -p /user/output
+hadoop fs -put /hadoop-data/share/input.txt /user/input/
+hadoop fs -put /hadoop-data/share/iptfile02.txt /user/input/
+hadoop fs -rm /user/input/canavro/*
+hadoop fs -mv /user/input/student.avsc /user/schema/.
+hadoop fs -put -f /share/input/avrohive/caninfodata.avro /user/input/canavro/
+hadoop fs -cat /user/input/canavro/part-r-00000.avro
+
+hadoop fs -rm /user/schema/caninfoschema.avsc
+hadoop fs -put /share/input/avrohive/caninfoschema2.avsc /user/schema/
+
+/share/lib/Hive-hook-example-1.0.jar
+add jar /share/lib/Hive-hook-example-1.0.jar;
+set hive.exec.pre.hooks=HiveExampleHook;
+hive  --service hiveserver2 restart
+
+-------------------------------------------------------------------------------------
+■docker
+docker rename CONTAINER NEW_NAME
+docker tag d583c3ac45fd myname/server:latest
+
+cd D:\docker\spark\Docker_Spark-Yarn-Hadoop-master\imageBak
+docker-compose -f docker-compose_test.yml up
+ docker info
+#查看动态资源占用情况
+docker stats --all shows a running list of containers.
+#查看对象信息
+docker inspect imageID/containerID
+
+docker exec -it <<Container_ID>> /bin/bash #by Container ID
+docker exec -it e88681417cb4 /bin/bash 
+docker exec -it c1e8e59afc0d /bin/bash 
+ 
+(docker attach 8d98fd43acd4)
+
+-------------------------------------------------------------------------------------
+
+#stop all containers
+docker start $(docker ps -aq)
+docker stop $(docker ps -aq)
+#delete all containers
+docker rm $(docker ps -aq)
+#stop and delete all containers
+#docker stop $(docker ps -q) & docker rm $(docker ps -aq)
+
+#delete all images
+docker rmi $(docker images -q)
+#delete all images force
+docker rmi -f $(docker images -q)
+#delete all images id is none
+docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+-------------------------------------------------------------------------------------
+uname -a
+cd D:\docker\spark\Docker_Spark-Yarn-Hadoop-master\imageBak
+#backup image:
+docker save -o img.base.save 749452e7df67
+docker save -o img.node-master.save 1a36bf676deb
+docker save -o img.node-one.save a5b642c6b0af
+docker save -o img.node-two.save 22b2c6d9f9c3
+docker save -o img.debian.save 7f228954ce78
+docker save -o img.docker4w_nsenter-dockerd.save cae870735e91
+
+#load image from saved image
+#docker load -i img.base.save
+#docker tag 749452e7df67 base:advith
+#docker load -i img.debian.save
+#docker tag 7f228954ce78 debian:advith
+#docker load -i img.docker4w_nsenter-dockerd.save
+#docker tag cae870735e91 docker4w/nsenter-dockerd:advith
+-------
+docker load -i img.node-master.save
+docker tag 1a36bf676deb node-master:advith
+docker load -i img.node-one.save
+docker tag a5b642c6b0af node-one:advith
+docker load -i img.node-two.save 
+docker tag 22b2c6d9f9c3 node-two:advith
+docker-compose up
+
+---------
+根据一个镜像可以启动多个容器，启动容器的命令是docker run
+sudo docker run -t -i ubuntu:12.04  /bin/bash
+或者
+sudo docker run -t -i  镜像id
+
+#commit container to image
+docker commit -m 'install git mvn' 40112ba82754
+
+#docker tag : 标记本地镜像，将其归入某一仓库。
+docker tag [OPTIONS] IMAGE[:TAG] [REGISTRYHOST/][USERNAME/]NAME[:TAG]
+docker tag 68100b162864 node-mst:v1
+>REPOSITORY                 TAG                 IMAGE ID            CREATED             SIZE
+>node-mst                   v1                  68100b162864        12 minutes ago      1.66GB
+
+-------------------------------------------------------------------------------------
+apt-get install git
+git clone https://github.com/apache/spark.git
+
+apt-cache search maven
+ls -l /etc/maven
+
+apt-get clean
+apt-get autoclean
+apt-get autoremove
+
+netstat -an
+
+--------------------------------------------hive-----------------------------------------
+D:\docker\spark\docker-hive-master_OK
+docker exec -it e88681417cb4 bash 
+  # /opt/hive/bin/beeline -u jdbc:hive2://localhost:10000
+  > CREATE TABLE pokes (foo INT, bar STRING);
+  > LOAD DATA LOCAL INPATH '/opt/hive/examples/files/kv1.txt' OVERWRITE INTO TABLE pokes;
+
+root@0892b749f1b9:/opt/hive/scripts# find / -name *avro*
+/opt/hadoop-2.7.4/share/doc/hadoop-project/api/src-html/org/apache/hadoop/io/serializer/avro
+/opt/hadoop-2.7.4/share/doc/hadoop-project/api/org/apache/hadoop/io/serializer/avro
+/opt/hadoop-2.7.4/share/hadoop/httpfs/tomcat/webapps/webhdfs/WEB-INF/lib/avro-1.7.4.jar
+/opt/hadoop-2.7.4/share/hadoop/mapreduce/lib/avro-1.7.4.jar
+/opt/hadoop-2.7.4/share/hadoop/kms/tomcat/webapps/kms/WEB-INF/lib/avro-1.7.4.jar
+/opt/hadoop-2.7.4/share/hadoop/tools/lib/avro-1.7.4.jar
+/opt/hadoop-2.7.4/share/hadoop/common/lib/avro-1.7.4.jar
+/opt/hadoop-2.7.4/src/hadoop-common-project/hadoop-common/src/test/java/org/apache/hadoop/io/serializer/avro
+/opt/hadoop-2.7.4/src/hadoop-common-project/hadoop-common/src/test/avro
+/opt/hadoop-2.7.4/src/hadoop-common-project/hadoop-common/src/test/avro/avroRecord.avsc
+/opt/hadoop-2.7.4/src/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/serializer/avro
+/opt/hadoop-2.7.4/src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/avro
+/opt/hive/examples/files/map_null_val.avro
+/opt/hive/examples/files/dec_old.avro
+/opt/hive/examples/files/map_null_schema.avro
+/opt/hive/examples/files/doctors.avro
+/opt/hive/examples/files/episodes.avro
+/opt/hive/examples/files/futurama_episodes.avro
+/opt/hive/examples/files/avro_charvarchar.txt
+/opt/hive/examples/files/type_evolution.avro
+/opt/hive/examples/files/avro_timestamp.txt
+/opt/hive/examples/files/avro_date.txt
+/opt/hive/examples/files/dec.avro
+/opt/hive/lib/avro-1.7.7.jar
+
+java -jar /opt/hadoop-2.7.4/share/hadoop/tools/lib/avro-1.7.4.jar getschema /opt/hive/examples/files/doctors.avro > /opt/hive/examples/files/doctors.avro.schema
+
+java -jar avro-tools-1.8.1.jar fromjson products.json --schema-file products.avsc > products.avro
+java -jar avro-tools-1.8.1.jar tojson products.avro
+java -jar avro-tools-1.7.7.jar compile schema user.avsc java.
+
+java -jar avro-tools-1.8.2.jar fromjson --schema-file D:/tmp/input/avrohive/student.avsc D:/tmp/input/avrohive/student.json > D:/tmp/input/avrohive/student2.avro
+
+java -jar avro-tools-1.8.2.jar tojson D:/tmp/input/avrohive/part-r-00000.avro
+java -jar avro-tools-1.8.2.jar getschema D:/tmp/input/avrohive/part-r-00000.avro > caninfoschema.avsc
+java -jar avro-tools-1.8.2.jar tojson D:/tmp/input/avrohive/part-r-00000.avro > D:/tmp/input/avrohive/part-r-00001.json
+java -jar avro-tools-1.8.2.jar fromjson --code deflate D:/tmp/input/avrohive/part-r-00000.json --schema-file D:/tmp/input/avrohive/caninfoschema.avsc > D:/tmp/input/avrohive/part-r-00003.avro
+
+java -jar avro-tools-1.8.2.jar fromjson --schema-file D:/tmp/input/avrohive/caninfoschema.avsc D:/tmp/input/avrohive/caninfodata.json > D:/tmp/input/avrohive/caninfodata.avro
+(cmd ok , powershell NG)
+
+java -jar avro-tools-1.8.2.jar jsontofrag D:/tmp/input/avrohive/part-r-00000.json --schema-file D:/tmp/input/avrohive/caninfoschema.avsc > D:/tmp/input/avrohive/part-r-00004.avro
+
+avro-tools-1.8.2.jar jsontofrag
+#check codec in avro file
+java -jar avro-tools-1.8.2.jar getschema D:/tmp/input/avrohive/part-r-00003.avro
+java -jar avro-tools-1.8.2.jar getmeta D:/tmp/input/avrohive/caninfodata.avro
+
+----------------------------------
+CREATE EXTERNAL TABLE caninfo2
+    ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+    STORED AS
+    INPUTFORMAT  'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+    OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+    LOCATION '/user/input/canavro/'
+    TBLPROPERTIES (
+        'avro.schema.url'='hdfs:///user/schema/caninfoschema2.avsc'
+    );
+    
+    load data local inpath '/share/input/avrohive/part-r-00001.avro' into  table  caninfo ;
+
+---------------------------------
+CREATE EXTERNAL TABLE Student
+    COMMENT "A table backed by Avro data with the Avro schema stored in HDFS"
+    ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+    STORED AS
+    INPUTFORMAT  'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+    OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+    LOCATION '/user/input/avro/'
+    TBLPROPERTIES (
+        'avro.schema.url'='hdfs:///user/schema/student.avsc'
+    );
+    
+    load data local inpath '/share/input/avrohive/student.avro' into  table  student ;
+
+
+---------------------
+
+CREATE EXTERNAL TABLE as_avro 
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe' 
+STORED as INPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat' 
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat' 
+LOCATION '/user/root/as_avro' 
+TBLPROPERTIES ('avro.schema.url'='hdfs:///user/root/avro.avsc');
+  trevni-avro
+
+--------------------------------------------hive-----------------------------------------
+ curl -fSL http://mirror.yannic-bonenberger.com/apache/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz -o /tmp/spark.tar.tgz
+↓
+ https://archive.apache.org/dist/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+
+-------------------------------------------------------------------------------------
+查看所有的volume
+docker volume ls
+删除没有被使用的所有volume
+docker volume prune
+
+D:/var/lib/docker/volumes/imagebak_node-one/_data
+docker run -v /d:/var:/hadoop-data/dfs
+
+---------------------------------------------------------------------
+mvn exec:java -Dexec.mainClass=cc.unmi.AvroDataTranser
+
+

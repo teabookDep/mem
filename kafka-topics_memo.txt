@@ -1,0 +1,85 @@
+C:\opt\kafka_2.11-0.11.0.2\bin\windows\kafka-topics.bat --list --zookeeper localhost:2181
+
+C:\opt\kafka_2.11-0.11.0.2\bin\windows\kafka-topics.bat --describe --topic my-topic  --zookeeper localhost:2181
+C:\opt\kafka_2.11-0.11.0.2\bin\windows\kafka-topics.bat --describe --topic order  --zookeeper localhost:2181
+C:\opt\kafka_2.11-0.11.0.2\bin\windows\kafka-topics.bat --describe --topic  phsical --zookeeper localhost:2181
+C:\opt\kafka_2.11-0.11.0.2\bin\windows\kafka-topics.bat --describe --topic test --zookeeper localhost:2181
+C:\opt\kafka_2.11-0.11.0.2\bin\windows\kafka-topics.bat --describe --topic user_events --zookeeper localhost:2181
+
+docker run -ti centos:latest /bin/bash
+
+docker run -ti centos7:latest /bin/bash
+
+rpm -qa ?列出所有安装?的包
+systemctl list-units --type=service
+
+
+docker run -ti docker.io/bde2020/spark-master:2.3.0-hadoop2.7 /bin/bash
+
+
+consul
+kubernetes
+fig
+
+
+https://github.com/big-data-europe/docker-hadoop-spark-workbench
+
+https://github.com/big-data-europe
+
+
+
+sudo curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+docker image rm 无法?除??解决?法（delete contaner）
+docker ps -a | grep "bin" | awk '{print $1 }'|xargs docker stop
+docker ps -a | grep "bin" | awk '{print $1 }'|xargs docker rm
+
+docker images|grep none|awk '{print $3 }'|xargs docker rmi
+
+$ sudo docker rm -f $(sudo docker ps -qa)
+
+$ sudo docker rmi $(sudo docker images -q)
+
+
+-------------20180707------------------------------------------------
+mkdir -p DockerImagesFiles/centos7.shh
+mkdir -p DockerImagesFiles/hadoop
+
+docker build -t="centos7-ssh" .
+
+docker build -t="centos7-spark2.3.0-hadoop2.7" .
+
+docker build -t="centos-spark-master" .
+docker build -t="centos-spark-worker" .
+
+ netstat -aunpt
+ 
+docker build --rm=true -t bde/spark-app .
+docker run --name my-spark-app --link spark-master:spark-master -d bde/spark-app
+
+
+sudo docker run -it --name spark --rm sequenceiq/spark:1.6.0 /bin/bash
+$ cd /usr/local/spark
+$ bin/spark-submit --master yarn-client --class org.apache.spark.examples.JavaWordCount lib/spark-examples-1.6.0-hadoop2.6.0.jar file:/usr/local/hadoop/input/
+
+sudo docker run -it --name spark --rm centos-spark-master sh -c "\"spark-submit --master yarn-client --class org.apache.spark.examples.JavaWordCount /usr/local/spark/lib/spark-examples-1.6.0-hadoop2.6.0.jar file:/usr/local/hadoop/input/\""
+sudo docker run -it --name spark --rm centos-spark-master sh -c "\"spark-submit --master spark://spark-master:7077 --class org.apache.spark.examples.JavaWordCount /spark/examples/jars/spark-examples_2.11-2.3.0.jar file:/etc/hosts\""
+
+sudo docker run -it --name spark --rm centos-spark-master sh -c "\"spark-submit --class org.apache.spark.examples.SparkPi --master spark://spark-master:7077 --executor-memory 1G --total-executor-cores 1 /spark/examples/jars/spark-examples_2.11-2.3.0.jar 100
+/spark/examples/jars/spark-examples_2.11-2.3.0.jar
+
+sudo docker run -it --name spark --rm centos-spark-master sh -c "\"/spark/bin/spark-submit --master spark://2b0e9846b159:7077 --class org.apache.spark.examples.JavaWordCount /spark/examples/jars/spark-examples_2.11-2.3.0.jar /etc/hosts\""
+
+-------------20180707------------------------------------------------
+
+ Credit to https://gist.github.com/bastman/5b57ddb3c11942094f8d0a97d461b430
+echo "Cleanup containers..."
+docker rm $(docker ps -qa --no-trunc --filter "status=exited")
+echo "Cleanup images..."
+docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+echo "Cleanup volumes..."
+docker volume rm $(docker volume ls -qf dangling=true)
