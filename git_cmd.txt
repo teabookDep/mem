@@ -30,6 +30,7 @@ git blame file_name
 
 git log --since=10.hour
 
+git log --graph --all --format="%x09%an%x09%h %d %s"
 
 当前目录所有修改的文件 从HEAD中签出并且把它恢复成未修改时的样子.
 git checkout .
