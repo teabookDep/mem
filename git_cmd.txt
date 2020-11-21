@@ -107,6 +107,28 @@ git merge –no-ff -m “注释” dev
 使用命令 git stash list来查看stash 的工作区
 git stash pop,恢复stash内容
 
+基于当前分支创建新分支
+git branch 新分支
+
+基于指定分支创建新分支
+git branch 新分支 指定分支
+
+基于某个 commit 创建分支
+git branch 新分支 某个 commit 的 id
+
+删除已合并到 master 分支的所有本地分支
+git branch --merged master | grep -v '^\*\| master' | xargs -n 1 git branch -d 
+
+删除远端 origin 已不存在的所有本地分支
+git remote prune orign
+
+某文件各行最后修改对应的 commit 以及作者
+git blame 文件
+
+新建带备注标签
+git tag -a v1.0 -m '前端食堂'
+
+
 删除远程分支
 git push origin --delete <branchName>
 查看远程分支
@@ -121,5 +143,32 @@ git branch -m devel develop
 
 看到分支的合并情况
 git log --graph --pretty=oneline --abbrev-commit
+
+查看已合并分支
+git branch --merged
+
+查看未合并分支
+git branch --no-merged
+
+获取已更改文件的列表
+git diff-tree --no-commit-id --name-only -r f9c4c4e0
+获取提交中所有文件的列表
+git ls-tree --name-only -r f9c4c4e0
+git show --stat --oneline f9c4c4e0
+git show --name-only --oneline  f9c4c4e0
+
+指定两个提交之间的更改文件列表（A/D/M）
+git diff --name-status <SHA1> <SHA1>^
+git diff --name-status f9c4c4e0 f9c4c4e0^
+
+git show --name-status --oneline f9c4c4e0
+
+#当你想要知道 Hello, World! 字符串是什么时候加到项目中哪个文件中去的
+git log -S "Hello, World!"
+-S"<string>"、-G"<string>"
+正则表达式去匹配而不是字符串, 那么你可以使用-G代替-S.
+
+#查询commit1与commit2之间的记录，包括commit1和commit2
+git log commit1 commit2
 
 
