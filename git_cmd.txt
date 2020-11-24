@@ -1,20 +1,28 @@
-﻿查看已经配置分支关联信息
-git branch -vv
-cat .git/config
-
-查看远程库详细信息
+﻿查看远程库详细信息
 git remote -v
 git remote show origin
-
-添加远程库
+添加远程仓库
+git remote add origin git@xx.xx.xx.xx:repos/xxx/xxx/xxx.git
 git remote add origin https://github.com/teabookDep/pyexcel.git
 git push -u origin master
 (第一次推送因为远程仓库为空 要加 -u)
+
 查看远程分支
 git branch -r
+git ls-remote
 
+创建跟踪分支
+git checkout -b 本地分支名 远端主机别名/远程分支名
+git checkout -b test origin/develop
+也可以不指定分支名，使用远程分支同名
+git checkout --track 远端主机别名/远程分支名
 
-git checkout –b branch4 origin/branch2
+查看分支跟踪（与远程分支关联）情况
+git branch -vv
+cat .git/config
+
+修改（当前分支）跟踪关系
+git branch -u 远端主机别名/远程分支名
 
 
 把当前分支中未提交的修改移动到其他分支
@@ -42,16 +50,6 @@ git config --global user.name "teabook"
 git config --global user.eamil "teabook@gmail.com"
 
 git clone https://github.com/teabookDep/docker-spark.git
-
-添加远程仓库
-git remote add origin git@xx.xx.xx.xx:repos/xxx/xxx/xxx.git
-
-
- create a new repository on the command line
-echo "# pyexcel" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
 
 
 Git撤销git commit 但是未git push的修改
@@ -103,15 +101,40 @@ forward”模式，在这种模式下，删除分支后，会丢掉分支信息�
 –no-ff来禁用”Fast forward”模式
 git merge –no-ff -m “注释” dev
 
+切换其他分支前规避未提交(index区，不包含工作区,所以一定先git add .)的内容
+git stash
 
 使用命令 git stash list来查看stash 的工作区
-git stash pop,恢复stash内容
+git stash pop,恢复stash内容同时删除stash区对应内容
+git stash apply,恢复stash内容,保留stash区对应内容
+git stash drop,删除stash内容
+git stash branch brxx,以stash内容为基准重新建立新分支并删除stash内容（当stash内容与index区内容冲突时用）
+
+
+基于当前分支创建新分支
+git branch 新分支
+
+基于指定分支创建新分支
+git branch 新分支 指定分支
+
+基于某个 commit 创建分支
+git branch 新分支 某个 commit 的 id
+
+删除已合并到 master 分支的所有本地分支
+git branch --merged master | grep -v '^\*\| master' | xargs -n 1 git branch -d 
+
+删除远端 origin 已不存在的所有本地分支
+git remote prune orign
+
+某文件各行最后修改对应的 commit 以及作者
+git blame 文件
+
+新建带备注标签
+git tag -a v1.0 -m '前端食堂'
+
 
 删除远程分支
 git push origin --delete <branchName>
-查看远程分支
-git branch -r
-git ls-remote
 
 删除远程tag
 git push origin --delete tag <tagname>
@@ -121,5 +144,68 @@ git branch -m devel develop
 
 看到分支的合并情况
 git log --graph --pretty=oneline --abbrev-commit
+git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+配置别名
+git config --global alias.ss status
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+# 删除全局配置
+git config --global --unset alias.xxx
+git config --global --unset user.xxx
+
+查看已合并分支
+git branch --merged
+
+查看未合并分支
+git branch --no-merged
+
+获取已更改文件的列表
+git diff-tree --no-commit-id --name-only -r f9c4c4e0
+获取提交中所有文件的列表
+git ls-tree --name-only -r f9c4c4e0
+git show --stat --oneline f9c4c4e0
+git show --name-only --oneline  f9c4c4e0
+
+指定两个提交之间的更改文件列表（A/D/M）
+git diff --name-status <SHA1> <SHA1>^
+git diff --name-status f9c4c4e0 f9c4c4e0^
+
+git show --name-status --oneline f9c4c4e0
+
+#当你想要知道 Hello, World! 字符串是什么时候加到项目中哪个文件中去的
+git log -S "Hello, World!"
+-S"<string>"、-G"<string>"
+正则表达式去匹配而不是字符串, 那么你可以使用-G代替-S.
+
+#查询commit1与commit2之间的记录，包括commit1和commit2
+git log commit1 commit2
+
+
+git add .(当前目录下所有文件，所有子目录)
+git add -A (工作区所有文件，所有子目录，无论当前位于哪个目录)
+git add -u （整个工作区已经跟踪的文件变更（包括文件删除），无论当前位于哪个目录下）
+
+# 编辑器会弹出上一次提交的信息，可以在这里修改提交信息
+git commit --amend
+# 修复提交，同时修改提交信息
+git commit --amend -m "本次提交的说明"
+# 加入 --no-edit 标记会修复提交但不修改提交信息，编辑器不会弹出上一次提交的信息
+git commit --amend --no-edit
+
+## archive命令就是将纯代码打包（默认tar，可以另指定zip等）
+git archive master | tar -x -C /somewhere/else # 等于将代码导出到另一个地方
+git archive master | bzip2 >source-tree.tar.bz2 # 代码打包后再压缩下
+git archive --format=zip --output /full/path/to/zipfile.zip master # 以zip压缩包导出
+
+本地与远程同时修改后，将本地修改与远程rebase
+git pull --rebase
+
+强制将分支指向某提交
+git branch -f master HEAD~3
+git branch -f master ae4900
+
+
+以branch1为base 变 branch2
+git rebase branch1 branch2
 
 
